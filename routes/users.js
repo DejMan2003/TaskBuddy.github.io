@@ -1,35 +1,24 @@
 const app = require("express");
+const bcrypt = require('bcrypt'); // bycrypt to salt the passswords
 const user = require("../models/user");
 
 const router = app.Router();
 
-router.get("/", async (req,res)=> 
-{
-try //Searches for all the users and sends them back in a JSON.
-{
-  const users = await user.find();
-  res.json(users);
-}
-catch(err) // Sends an error message back if there is an error.
-{
-  res.status(500).json({message : err.message, });
-}
-});
+const saltRounds = 12;
 
-//Post Request to Create User
-router.post("/", async (req,res) => 
+//Post Request to Register User
+router.post("/register", async (req,res) => 
   {
   
-  const user = 
-   new User ({
-      name: req.body.name,
-      email: req.body.email,
-      password: req.body.password, 
-    });
+  const {name, email, password} = req.body;
 
   try //Saves the user after it's been initialised.
   {
-    const newUser = await user.save();
+    // Hashes and salt the password
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const newUser = new user({ name, email, password: hashedPassword });
+    await newUser.save();
+    
     res.status(201).json(newUser); 
   }
   catch
@@ -37,6 +26,32 @@ router.post("/", async (req,res) =>
     res.status(500).json({message : err.message,});
   }
   });
+
+
+
+//Post Request to Login a User.
+router.post('/login', passport.authenticate('local', 
+  {
+    successRedirect: '/profile', //redirects user to their profile, if they, have an account.
+    failureRedirect: '/login',// redirects user back to login page if info is incorrect or there is no existing account.
+  }));
+
+//Logout User Route
+  router.get('/logout', (req,res) => 
+    {
+      req.logout();
+      req.redirect('/');// Redirect user to the home page
+    });
+
+//Countermeasure to verfiy that all users have accounts.
+  router.get("/profile",(req,res) => 
+    {
+      if(!req.isAuthenticated)
+        {
+          res.status(401).json({message : "You don't have access to this profile!"}); //Sends error message for lack of access to the account.
+        }
+        res.json("/user");// Send's user data.
+    });
 
 
 module.exports = router;
