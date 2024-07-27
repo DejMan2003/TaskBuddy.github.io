@@ -1,0 +1,33 @@
+{
+  "name": "task-buddy",
+  "version": "1.0.0",
+  "description": "An AI Task Making Model",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DejMan2003/TaskBuddy.github.io.git"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.3.1",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "express-sessions": "^1.0.6",
+    "mongodb": "^6.8.0",
+    "mongoose": "^8.5.1",
+    "passport": "^0.7.0",
+    "passport-google-oauth2": "^0.2.0",
+    "passport-local": "^1.0.0"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DejMan2003/TaskBuddy.github.io/issues"
+  },
+  "homepage": "https://github.com/DejMan2003/TaskBuddy.github.io#readme"
+}
