@@ -1,38 +1,106 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* src/styles.css */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f9;
+  margin: 0;
+  padding: 0;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
+  height: 100vh;
 }
 
-.App-link {
-  color: #61dafb;
+.app {
+  text-align: center;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 500px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+h1 {
+  color: #333;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.task-list {
+  margin-top: 20px;
+}
+
+.task {
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  background-color: #fafafa;
+  position: relative;
+  overflow: hidden;
+}
+
+.task p {
+  margin: 0;
+  flex: 1;
+  text-align: left; /* Align text to the left */
+  white-space: nowrap;
+}
+
+.task-buttons {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}
+
+.task button {
+  background-color: transparent;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.task button:hover {
+  background-color: #f1f1f1;
+}
+
+.task button:before {
+  font-size: 16px; /* Adjust icon size */
+  color: #dc3545; /* Icon color */
+}
+
+.task button:hover:before {
+  color: #c82333;
+}
+
+.edit-button:before {
+  content: "\270E"; /* Unicode pencil symbol */
+}
+
+.delete-button:before {
+  content: "\2716"; /* Unicode "x" symbol */
 }
