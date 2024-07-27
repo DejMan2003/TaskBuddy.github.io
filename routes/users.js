@@ -1,6 +1,7 @@
 const app = require("express");
 const bcrypt = require('bcrypt'); // bycrypt to salt the passswords
 const user = require("../models/user");
+const passport = require("passport");
 
 const router = app.Router();
 
