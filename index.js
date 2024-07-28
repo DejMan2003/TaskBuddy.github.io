@@ -36,10 +36,9 @@ app.use(passport.session());
 const mongoURI = process.env.MONGO_URI;
 
 // Establishing a connection to the MongoDB through the MONGO URI
-mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(mongoURI)
   .then(() => {
     console.log('MongoDB connection established ...');
-    insertData();
   })
   .catch(err => {
     console.error('Failed to connect to MongoDB:', err);
@@ -47,12 +46,16 @@ mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   });
 
 // Method for inserting and verifying the data.
-const insertData = async () => {
+app.post("/insert", async (req,res) => {
   try {
     // Array that holds the info of the user.
-    const users = [
-      { name: 'Alice', email: 'alice@example.com', password: 'password123' },
-      { name: 'Bob', email: 'bob@example.com', password: 'password456' },
+    const users = 
+    [
+      {
+        name: req.body.name,
+        password: req.body.password,
+        email: req.body.email,
+      }
     ];
 
     // Array to hold info of new users
@@ -77,7 +80,7 @@ const insertData = async () => {
   } catch (error) {
     console.error('Error with the Insertion of data:', error.message);
   }
-};
+});
 
 // Post Request to Login a User.
 app.post('/login', (req, res) => {
