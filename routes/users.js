@@ -2,33 +2,62 @@ const app = require("express");
 const bcrypt = require('bcrypt'); // bycrypt to salt the passswords
 const user = require("../models/user");
 const passport = require("passport");
-
 const router = app.Router();
 
 const saltRounds = 12;
+
+
+// Adds a task to a user Dynamically and searches by UserID.
+router.post('/:userId/tasks', async (req, res) => {
+  const { userId } = req.params;
+  const { text } = req.body;
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    user.tasks.push({ text });
+    await user.save();
+
+    res.status(201).json(user);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+
 
 //Post Request to Register User
 router.post("/register", async (req,res) => 
   {
   
-  const {name, email, password} = req.body;
+  const {name, email, password ,tasks} = req.body;
 
   try //Saves the user after it's been initialised.
   {
     // Hashes and salt the password
     const hashedPassword = await bcrypt.hash(password, saltRounds);
-    const newUser = new user({ name, email, password: hashedPassword });
+    const newUser = new user(
+   { name,
+        email,
+        password: hashedPassword,
+        task: tasks.map(task => ({text : task})),
+   });
     await newUser.save();
-    
+
     res.status(201).json(newUser); 
   }
-  catch
+  catch(err)
   {
     res.status(500).json({message : err.message,});
   }
-  });
-
-
+  finally
+{
+  await client.close();
+}
+});
 
 //Post Request to Login a User.
 router.post('/login', passport.authenticate('local', 
