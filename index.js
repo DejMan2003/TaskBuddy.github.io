@@ -16,6 +16,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
+//Session Cookies Method set up for 24hours.
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -80,6 +81,86 @@ app.post("/insert", async (req,res) => {
   } catch (error) {
     console.error('Error with the Insertion of data:', error.message);
   }
+});
+
+// Task schema and model
+const TaskSchema = new mongoose.Schema({
+  text: { type: String, required: true },
+});
+
+//DB Model for the Task System.
+const Task = mongoose.model("Task",TaskSchema);
+
+//Endpoint to search for a specific task and display it back to the user.
+app.get("/tasks", async(req,res) => 
+  {
+    try
+    {
+      const tasks = await Task.find();
+      res.json(tasks);
+    }
+    catch(error)
+    {
+      res.status(501).json({message: error.message});
+    }
+  });
+
+//Post Request to create a specific task for the user.
+app.post("tasks",async(req,res) => 
+  {
+    const task = new Task(
+    {
+      text : req.body.text,
+    });
+
+    try
+    {
+      const newTask = await task.save();
+      res.status(201).json(newTask);
+    }
+    catch(error)
+    {
+      res.status(400).json({message: error.message});
+    }
+  });
+
+//PUT Request to search for the Task by userID and edit and Save the new task.
+  app.put("/tasks/:id", async(req,res) => 
+    {
+      try
+      {
+        const task = await Task.findById(req.params.id);
+        if(!task)
+          {
+            return res.status(404).json({message : "Task not Found!"});
+          }
+       task.text = req.body.text;
+       const updatedTask = await task.save();
+       res.status(201).json(updatedTask);
+      }
+
+      catch(error)
+      {
+        res.status(400).json({message : error.message});
+      }
+    });
+//DELETE Request to be able to delete the task from the chore list by searching for userID.
+app.delete("/task/:id", async(req,res) => 
+{
+  try
+  {
+    const task = await Task.findById(req.params.id);
+    if(!task)
+      {
+        return res.status(404).json({message : "Task not Found!"});
+      }
+    await task.remove();
+    res.json({message : "Task has been deleted."});
+  }
+  catch(error)
+  {
+    res.status(400).json({message : error.message});
+  } 
 });
 
 // Post Request to Login a User.
